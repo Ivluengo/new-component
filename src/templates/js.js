@@ -1,7 +1,10 @@
-import React from 'react';
 
 function COMPONENT_NAME() {
-  return <div></div>;
+  return (
+    <>
+      <span>COMPONENT_NAME</span>
+    </>
+  );
 }
 
 export default COMPONENT_NAME;

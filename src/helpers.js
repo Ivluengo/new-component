@@ -29,6 +29,8 @@ const AFFIRMATIONS = require('./affirmations');
 module.exports.getConfig = () => {
   const home = os.homedir();
   const currentPath = process.cwd();
+  const platform = os.platform();
+
 
   const defaults = {
     lang: 'js',
@@ -36,11 +38,12 @@ module.exports.getConfig = () => {
   };
 
   const globalOverrides = requireOptional(
-    `/${home}/.new-component-config.json`
+    platform === 'win32' ? `${home}/.new-component-config.json` : `/${home}/.new-component-config.json`
   );
 
   const localOverrides = requireOptional(
-    `/${currentPath}/.new-component-config.json`
+    platform === 'win32' ? `${currentPath}/.new-component-config.json` : `/${currentPath}/.new-component-config.json`
+    `${currentPath}/.new-component-config.json`
   );
 
   return Object.assign({}, defaults, globalOverrides, localOverrides);
