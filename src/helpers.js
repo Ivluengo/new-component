@@ -33,7 +33,7 @@ module.exports.getConfig = () => {
 
 
   const defaults = {
-    lang: 'js',
+    lang: 'ts',
     dir: 'src/components',
   };
 
