@@ -34,7 +34,7 @@ module.exports.getConfig = () => {
 
   const defaults = {
     lang: 'ts',
-    dir: 'src/components',
+    dir: 'src/',
   };
 
   const globalOverrides = requireOptional(

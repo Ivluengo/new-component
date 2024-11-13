@@ -33,20 +33,21 @@ const prettify = buildPrettifier(config.prettierConfig);
 
 program
   .version(version)
-  .arguments('<componentName>')
+  .argument('<componentName>')
+  .option('-t, --type [type]', 'The type of component to create, it can be "component", "page" or "layout" (default: "component")', 'component')
   .option(
     '-l, --lang <language>',
-    'Which language to use (default: "js")',
+    'Which language to use (default: "ts")',
     /^(js|ts)$/i,
     config.lang
   )
   .option(
     '-d, --dir <pathToDirectory>',
-    'Path to the "components" directory (default: "src/components")',
+    'Path to the "main" directory (default: "src/")',
     config.dir
   )
   .parse(process.argv);
-
+  
 const [componentName] = program.args;
 
 const options = program.opts();
@@ -57,8 +58,19 @@ const indexExtension = options.lang === 'js' ? 'js' : 'ts';
 // Find the path to the selected template file.
 const templatePath = `./templates/${options.lang}.js`;
 
+// Check if type is valid
+const validTypes = ['component', 'page', 'layout'];
+if (!validTypes.includes(options.type)) {
+  logError(
+    `Sorry, the type you especified for your component is not valid. Please use one of the following: ${validTypes.join(', ')}`
+  );
+  process.exit(0);
+}
+const folderName = `${options.type}s`;
+
 // Get all of our file paths worked out, for the user's project.
-const componentDir = `${options.dir}/${componentName}`;
+
+const componentDir = `${options.dir}/${folderName}/${componentName}`;
 const filePath = `${componentDir}/${componentName}.${fileExtension}`;
 const indexPath = `${componentDir}/index.${indexExtension}`;
 
@@ -84,7 +96,8 @@ if (!componentName) {
 
 // Check to see if the parent directory exists.
 // Create it if not
-createParentDirectoryIfNecessary(options.dir);
+const parentDir = path.resolve(options.dir, folderName);
+createParentDirectoryIfNecessary(parentDir);
 
 // Check to see if this component has already been created
 const fullPathToComponentDir = path.resolve(componentDir);
